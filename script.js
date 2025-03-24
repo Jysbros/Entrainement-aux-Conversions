@@ -16,6 +16,21 @@ const unites = {
     euro: ["cts", "€", "k€"]
 };
 
+const facteursConversion = {
+    "mg": 0.001, "cg": 0.01, "dg": 0.1, "g": 1, "dag": 10, "hg": 100, "kg": 1000,
+    "mm": 0.001, "cm": 0.01, "dm": 0.1, "m": 1, "dam": 10, "hm": 100, "km": 1000,
+    "mm²": 0.000001, "cm²": 0.0001, "dm²": 0.01, "m²": 1, "dam²": 100, "a": 100, "hm²": 10000, "ha": 10000, "km²": 1000000,
+    "ml": 0.001, "cl": 0.01, "dl": 0.1, "l": 1, "dal": 10, "hl": 100, "kl": 1000,
+    "mm³": 0.000001, "cm³": 0.001, "dm³": 1, "m³": 1000, "dam³": 1000000, "hm³": 1000000000, "km³": 1000000000000
+};
+
+function convertir(valeur, uniteDepart, uniteArrivee) {
+    if (facteursConversion[uniteDepart] && facteursConversion[uniteArrivee]) {
+        return (valeur * facteursConversion[uniteDepart] / facteursConversion[uniteArrivee]).toFixed(3);
+    }
+    return null;
+}
+
 document.getElementById("genererExercice").addEventListener("click", function() {
     const exerciceContainer = document.getElementById("exercice");
     exerciceContainer.innerHTML = "";
@@ -53,9 +68,17 @@ document.getElementById("genererExercice").addEventListener("click", function() 
 
 // Fonction de correction
 document.getElementById("corrigerExercice").addEventListener("click", function() {
-    document.querySelectorAll(".reponse").forEach(input => {
-        if (input.value.trim() !== "") {
-            input.style.backgroundColor = "lightgreen"; 
+    document.querySelectorAll(".question").forEach(question => {
+        const texteQuestion = question.innerText.split(" ");
+        const valeur = parseFloat(texteQuestion[0]);
+        const uniteDepart = texteQuestion[1];
+        const uniteArrivee = texteQuestion[texteQuestion.length - 1];
+        const input = question.querySelector(".reponse");
+        const reponse = parseFloat(input.value);
+        const bonneReponse = convertir(valeur, uniteDepart, uniteArrivee);
+        
+        if (reponse === parseFloat(bonneReponse)) {
+            input.style.backgroundColor = "lightgreen";
         } else {
             input.style.backgroundColor = "red";
         }
