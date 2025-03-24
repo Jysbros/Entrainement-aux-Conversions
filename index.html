@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrainement aux conversions d'unité</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <h1>Entrainement aux conversions d'unité</h1>
+    <p>Prêt à relever le défi des conversions d'unités ? Commencez maintenant !</p>
+    
+    <div class="settings">
+        <h2>Paramètres de l'exercice</h2>
+        
+        <label>Nombre de conversions :</label>
+        <select id="nombreConversions">
+            <option value="1">1</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+        
+        <label>Niveau de difficulté :</label>
+        <select id="difficulte">
+            <option value="debutant">Débutant</option>
+            <option value="apprenti">Apprenti</option>
+            <option value="confirme">Confirmé</option>
+            <option value="expert">Expert</option>
+        </select>
+        
+        <h3>Choisissez les grandeurs :</h3>
+        <div id="grandeurs">
+            <label><input type="checkbox" class="grandeur" value="masse"> Masse</label>
+            <label><input type="checkbox" class="grandeur" value="longueur"> Longueur</label>
+            <label><input type="checkbox" class="grandeur" value="surface"> Surface</label>
+            <label><input type="checkbox" class="grandeur" value="volume"> Volume</label>
+            <label><input type="checkbox" class="grandeur" value="temps"> Temps</label>
+            <label><input type="checkbox" class="grandeur" value="temperature"> Température</label>
+            <label><input type="checkbox" class="grandeur" value="pression"> Pression</label>
+            <label><input type="checkbox" class="grandeur" value="tension"> Tension</label>
+            <label><input type="checkbox" class="grandeur" value="intensite"> Intensité</label>
+            <label><input type="checkbox" class="grandeur" value="resistance"> Résistance</label>
+            <label><input type="checkbox" class="grandeur" value="puissance"> Puissance</label>
+            <label><input type="checkbox" class="grandeur" value="energie"> Énergie</label>
+            <label><input type="checkbox" class="grandeur" value="force"> Force</label>
+            <label><input type="checkbox" class="grandeur" value="charge"> Charge</label>
+            <label><input type="checkbox" class="grandeur" value="euro"> Euro</label>
+        </div>
+        
+        <!-- Zone minuteur -->
+        <div>
+            <label for="minuteurMinutes">Minutes:</label>
+            <input type="number" id="minuteurMinutes" value="5" min="0">
+    
+            <label for="minuteurSecondes">Secondes:</label>
+            <input type="number" id="minuteurSecondes" value="0" min="0" max="59">
+    
+            <button id="activerMinuteur">Activer le minuteur</button>
+    
+            <div id="compteurTemps">00:00</div> <!-- Affichage du temps restant -->
+        </div>
+    </div>
+    
+    <button id="genererExercice">Générer l'exercice</button>
+    
+    <div id="exercice"></div>
+    
+    <div id="actions" style="display:none;">
+        <button id="corrigerExercice">Corriger</button>
+        <button id="imprimerExercice">Imprimer</button>
+        <button id="genererPDF">Générer PDF</button>
+    </div>
+    
+    <footer>
+        <p>Site par Ghislain Brosseau</p>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>
