@@ -1,4 +1,5 @@
-const unites = {
+const unites = { 
+    // Définition des unités pour toutes les grandeurs
     masse: ["mg", "cg", "dg", "g", "dag", "hg", "kg"],
     longueur: ["mm", "cm", "dm", "m", "dam", "hm", "km"],
     surface: ["mm²", "cm²", "dm²", "m²", "dam²", "a", "hm²", "ha", "km²"],
@@ -16,22 +17,34 @@ const unites = {
     euro: ["cts", "€", "k€"]
 };
 
-const facteursConversion = {
+const facteursConversion = { 
+    // Définition des facteurs de conversion pour toutes les grandeurs
     "mg": 0.001, "cg": 0.01, "dg": 0.1, "g": 1, "dag": 10, "hg": 100, "kg": 1000,
     "mm": 0.001, "cm": 0.01, "dm": 0.1, "m": 1, "dam": 10, "hm": 100, "km": 1000,
     "mm²": 0.000001, "cm²": 0.0001, "dm²": 0.01, "m²": 1, "dam²": 100, "a": 100, "hm²": 10000, "ha": 10000, "km²": 1000000,
     "ml": 0.001, "cl": 0.01, "dl": 0.1, "l": 1, "dal": 10, "hl": 100, "kl": 1000,
-    "mm³": 0.000001, "cm³": 0.001, "dm³": 1, "m³": 1000, "dam³": 1000000, "hm³": 1000000000, "km³": 1000000000000
+    "mm³": 0.000001, "cm³": 0.001, "dm³": 1, "m³": 1000, "dam³": 1000000, "hm³": 1000000000, "km³": 1000000000000,
+    "ms": 0.001, "cs": 0.01, "ds": 0.1, "s": 1, "min": 60, "h": 3600, "j": 86400,
+    "°C": 1, "m°C": 1, "k°C": 1, "K": 1,
+    "mbar": 0.001, "cbar": 0.01, "dbar": 0.1, "bar": 1, "dabar": 10, "hbar": 100, "kbar": 1000, "hPa": 1, "Pa": 0.00001, "kPa": 0.001,
+    "mV": 0.001, "cV": 0.01, "dV": 0.1, "V": 1, "daV": 10, "hV": 100, "kV": 1000,
+    "mA": 0.001, "cA": 0.01, "dA": 0.1, "A": 1, "daA": 10, "hA": 100, "kA": 1000,
+    "mohm": 0.001, "cohm": 0.01, "dohm": 0.1, "ohm": 1, "daohm": 10, "hohm": 100, "kohm": 1000,
+    "mW": 0.001, "cW": 0.01, "dW": 0.1, "W": 1, "daW": 10, "hW": 100, "kW": 1000,
+    "mJ": 0.001, "cJ": 0.01, "dJ": 0.1, "J": 1, "daJ": 10, "hJ": 100, "kJ": 1000,
+    "mN": 0.001, "cN": 0.01, "dN": 0.1, "N": 1, "daN": 10, "hN": 100, "kN": 1000,
+    "mC": 0.001, "cC": 0.01, "dC": 0.1, "C": 1, "daC": 10, "hC": 100, "kC": 1000,
+    "cts": 0.01, "€": 1, "k€": 1000
 };
 
 function convertir(valeur, uniteDepart, uniteArrivee) {
-    if (facteursConversion[uniteDepart] && facteursConversion[uniteArrivee]) {
+    if (facteursConversion[uniteDepart] !== undefined && facteursConversion[uniteArrivee] !== undefined) {
         return (valeur * facteursConversion[uniteDepart] / facteursConversion[uniteArrivee]).toFixed(3);
     }
     return null;
 }
 
-document.getElementById("genererExercice").addEventListener("click", function() {
+function genererExercice() {
     const exerciceContainer = document.getElementById("exercice");
     exerciceContainer.innerHTML = "";
     
@@ -59,28 +72,32 @@ document.getElementById("genererExercice").addEventListener("click", function() 
         
         const question = document.createElement("div");
         question.classList.add("question");
+        question.dataset.valeur = valeur;
+        question.dataset.uniteDepart = uniteDepart;
+        question.dataset.uniteArrivee = uniteArrivee;
         question.innerHTML = `${valeur} ${uniteDepart} = <input type='text' class='reponse'> ${uniteArrivee}`;
         exerciceContainer.appendChild(question);
     }
     
     document.getElementById("actions").style.display = "block";
-});
+}
 
-// Fonction de correction
+document.getElementById("genererExercice").addEventListener("click", genererExercice);
+
 document.getElementById("corrigerExercice").addEventListener("click", function() {
-    document.querySelectorAll(".question").forEach(question => {
-        const texteQuestion = question.innerText.split(" ");
-        const valeur = parseFloat(texteQuestion[0]);
-        const uniteDepart = texteQuestion[1];
-        const uniteArrivee = texteQuestion[texteQuestion.length - 1];
-        const input = question.querySelector(".reponse");
-        const reponse = parseFloat(input.value);
-        const bonneReponse = convertir(valeur, uniteDepart, uniteArrivee);
+    let questions = document.querySelectorAll(".question");
+    questions.forEach(question => {
+        let valeur = parseFloat(question.dataset.valeur);
+        let uniteDepart = question.dataset.uniteDepart;
+        let uniteArrivee = question.dataset.uniteArrivee;
+        let input = question.querySelector("input");
+        let reponseUtilisateur = parseFloat(input.value.replace(",", "."));
+        let reponseCorrecte = parseFloat(convertir(valeur, uniteDepart, uniteArrivee));
         
-        if (reponse === parseFloat(bonneReponse)) {
+        if (!isNaN(reponseCorrecte) && !isNaN(reponseUtilisateur) && reponseUtilisateur.toFixed(3) === reponseCorrecte.toFixed(3)) {
             input.style.backgroundColor = "lightgreen";
         } else {
-            input.style.backgroundColor = "red";
+            input.style.backgroundColor = "lightcoral";
         }
     });
 });
@@ -94,34 +111,13 @@ document.getElementById("imprimerExercice").addEventListener("click", function()
 document.getElementById("genererPDF").addEventListener("click", function() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
+    let questions = document.querySelectorAll(".question");
+    let y = 10;
     
-    doc.text("Exercice de conversion d'unités", 10, 10);
-    
-    let y = 20;
-    document.querySelectorAll(".question").forEach(question => {
-        doc.text(question.innerText, 10, y);
+    questions.forEach((question, index) => {
+        doc.text(`${index + 1}. ${question.dataset.valeur} ${question.dataset.uniteDepart} = ${question.querySelector("input").value} ${question.dataset.uniteArrivee}`, 10, y);
         y += 10;
     });
     
-    doc.save("exercice_conversions.pdf");
-});
-
-// Minuteur
-let timer;
-document.getElementById("activerMinuteur").addEventListener("click", function() {
-    const minutes = parseInt(document.getElementById("minuteurMinutes").value) || 0;
-    const secondes = parseInt(document.getElementById("minuteurSecondes").value) || 0;
-    let totalTime = minutes * 60 + secondes;
-    
-    if (timer) clearInterval(timer);
-    
-    timer = setInterval(() => {
-        if (totalTime <= 0) {
-            clearInterval(timer);
-            alert("Temps écoulé !");
-        } else {
-            totalTime--;
-            document.getElementById("compteurTemps").innerText = `${Math.floor(totalTime / 60)}:${totalTime % 60}`;
-        }
-    }, 1000);
+    doc.save("exercice.pdf");
 });
